@@ -296,7 +296,7 @@ namespace WorkLifeUnitTesting
             // Act
             List<WorkLifeUser> result = workLifeLogicLayer.GetUsers().ToList();
             // Assert
-            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(2, result.Count); 
         }
 
         [TestMethod]
