@@ -1,0 +1,78 @@
+﻿@model WorkLife.Models.ViewModel.EmployerJobsViewModel
+
+<h2>Employer Information</h2>
+
+@if (Model.WorkLifeUser.Employer != null)
+{
+    <div>
+        <strong>Company Name:</strong> @Model.WorkLifeUser.Employer.CompanyName
+    </div>
+    <div>
+        <strong>Description:</strong> @Model.WorkLifeUser.Employer.Description
+    </div>
+    <div>
+        <strong>Region:</strong> @Model.WorkLifeUser.Employer.Region
+    </div>
+    @if (Model.WorkLifeUser.Employer.IndustryAreas != null)
+    {
+        <div>
+            <strong>Industry Areas:</strong>
+            <ul>
+                @foreach (var industryArea in Model.WorkLifeUser.Employer.IndustryAreas)
+                {
+                    <li>@industryArea.IndustryArea.Title</li>
+                }
+            </ul>
+        </div>
+    }
+    <h3>Jobs</h3>
+    @if (Model.Jobs != null && Model.Jobs.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Duration</th>
+                    <th>Competition</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>Submission Deadline</th>
+                    <th>Industry Areas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var job in Model.Jobs)
+                {
+                    <tr>
+                        <td>@job.Title</td>
+                        <td>@job.Duration</td>
+                        <td>@job.Competition</td>
+                        <td>@job.Location</td>
+                        <td>@job.Description</td>
+                        <td>@job.StartDate</td>
+                        <td>@job.SubmissionDeadline</td>
+                        <td>
+                            @foreach (var industryArea in job.IndustryAreas)
+                            {
+                                @industryArea.IndustryArea.Title
+                                @if (industryArea != job.IndustryAreas.Last())
+                                {
+                                    <text>, </text>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No jobs found for this employer.</p>
+    }
+}
+else
+{
+    <p>No Current Employer</p>
+}

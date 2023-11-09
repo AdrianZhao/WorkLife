@@ -1,0 +1,42 @@
+﻿@model WorkLife.Models.Employer
+@{
+    ViewData["Title"] = "Create Employer";
+}
+
+<h2>Create Employer</h2>
+
+<form asp-action="NewEmployerPage">
+    <div class="form-group">
+        <label asp-for="CompanyName">Company Name:</label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description">Description (Optional):</label>
+        <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Region:</label>
+        @foreach (var item in ViewBag.Countries)
+        {
+            <div>
+                <input type="radio" asp-for="Region" value="@item.Value" checked="@(item.Value == ((SelectList)ViewBag.Countries).FirstOrDefault()?.Value)" />
+                @item.Text
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label>Industry Areas:</label>
+        <textarea name="industryAreasInput" class="form-control" rows="4"></textarea>
+        @if (ViewData.ModelState.ContainsKey("industryAreasInput"))
+        {
+            <span class="text-danger">@Html.ValidationMessage("industryAreasInput")</span>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

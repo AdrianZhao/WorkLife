@@ -1,0 +1,37 @@
+﻿@model WorkLife.Areas.Identity.Data.WorkLifeUser
+
+<h2>Applicant Information</h2>
+
+@if (Model.Applicant != null)
+{
+    <div>
+        <strong>Company Name:</strong> @Model.Applicant.PersonName
+    </div>
+    <div>
+        <strong>Description:</strong> @Model.Applicant.FamilyName
+    </div>
+    <div>
+        <strong>Date Of Birth:</strong> @Model.Applicant.DateOfBirth
+    </div>
+    <div>
+        <strong>Region:</strong> @Model.Applicant.Region
+    </div>
+    <div>
+        @if (Model.Applicant.IndustryAreas != null)
+        {
+            <div>
+                <strong>Industry Areas:</strong>
+                <ul>
+                    @foreach (var industryArea in Model.Applicant.IndustryAreas)
+                    {
+                        <li>@industryArea.IndustryArea.Title</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No Current Applicant</p>
+}
