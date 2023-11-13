@@ -38,6 +38,8 @@ namespace WorkLife.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DateMustBeAfter(ErrorMessage = "Please enter a valid date after today.")]
         public DateTime SubmissionDeadline { get; set; }
+
+        public ICollection<Application>? Applications { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]

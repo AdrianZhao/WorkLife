@@ -22,7 +22,7 @@
             <a id="profile" class="nav-link text-dark" asp-controller="Employers" asp-action="Index">Your Employer Profile</a>
         </li>
         <li class="nav-item">
-            <a id="editProfile" class="nav-link text-dark" asp-controller="Employers" asp-action="EditEmployerProfile">Edit Employer Profile</a>
+            <a id="editProfile" class="nav-link text-dark" asp-controller="Employers" asp-action="Profile">Edit Employer Profile</a>
         </li>
     }
     else if (User.IsInRole("Applicant"))
@@ -31,10 +31,13 @@
             <a id="allJobs" class="nav-link text-dark" asp-controller="Jobs" asp-action="Index">All Jobs</a>
         </li>
         <li class="nav-item">
+            <a id="allJobs" class="nav-link text-dark" asp-controller="Jobs" asp-action="MyApplications">My Applications</a>
+        </li>
+        <li class="nav-item">
             <a id="profile" class="nav-link text-dark" asp-controller="Applicants" asp-action="Index">Your Applicant Profile</a>
         </li>
         <li class="nav-item">
-            <a id="editProfile" class="nav-link text-dark" asp-controller="Applicants" asp-action="EditApplicantProfile">Edit Applicant Profile</a>
+            <a id="editProfile" class="nav-link text-dark" asp-controller="Applicants" asp-action="Profile">Edit Applicant Profile</a>
         </li>
     }
     <li class="nav-item">

@@ -214,6 +214,48 @@ namespace WorkLife.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Resume = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    ApplicantEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicantId = table.Column<int>(type: "int", nullable: true),
+                    JobId = table.Column<int>(type: "int", nullable: false),
+                    ReferenceOneName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceOneEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceOnePhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceTwoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceTwoEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceTwoPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceThreeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceThreeEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceThreePhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFourName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFourEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFourPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFiveName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFiveEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferenceFivePhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_Applicants_ApplicantId",
+                        column: x => x.ApplicantId,
+                        principalTable: "Applicants",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Applications_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobIndustryAreas",
                 columns: table => new
                 {
@@ -335,6 +377,16 @@ namespace WorkLife.Migrations
                 column: "IndustryAreaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Applications_ApplicantId",
+                table: "Applications",
+                column: "ApplicantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_JobId",
+                table: "Applications",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -409,6 +461,9 @@ namespace WorkLife.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ApplicantIndustryAreas");
+
+            migrationBuilder.DropTable(
+                name: "Applications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

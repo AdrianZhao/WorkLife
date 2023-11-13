@@ -17,9 +17,9 @@ namespace WorkLife.Controllers
     public class JobsController : Controller
     {
         private readonly WorkLifeLogicLayer _workLifeLogicLayer;
-        public JobsController(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
+        public JobsController(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<Application> applicationRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
         {
-            _workLifeLogicLayer = new WorkLifeLogicLayer(applicantRepository, employerRepository, workLifeUserRepository, countryRepository, jobRepository, industryAreaRepository, applicantIndustryAreaRepository, employerIndustryAreaRepository, jobIndustryAreaRepository, roleManager, userManager, signInManager);
+            _workLifeLogicLayer = new WorkLifeLogicLayer(applicantRepository, employerRepository, workLifeUserRepository, countryRepository, jobRepository, industryAreaRepository, applicationRepository, applicantIndustryAreaRepository, employerIndustryAreaRepository, jobIndustryAreaRepository, roleManager, userManager, signInManager);
         }
 
         public IActionResult Index()
@@ -107,9 +107,86 @@ namespace WorkLife.Controllers
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {
-            Job job = _workLifeLogicLayer.GetJobById(id);
             _workLifeLogicLayer.DeleteJobById(id);
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Applicant")]
+        public IActionResult Apply(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            ViewBag.JobId = id;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Apply([Bind("JobId,Resume,ReferenceOneName,ReferenceOneEmail,ReferenceOnePhoneNumber,ReferenceTwoName,ReferenceTwoEmail,ReferenceTwoPhoneNumber,ReferenceThreeName,ReferenceThreeEmail,ReferenceThreePhoneNumber,ReferenceFourName,ReferenceFourEmail,ReferenceFourPhoneNumber,ReferenceFiveName,ReferenceFiveEmail,ReferenceFivePhoneNumber")] Application application)
+        {
+            WorkLifeUser workLifeUser = await _workLifeLogicLayer.GetWorkLifeUserByEmail(User.Identity.Name);
+            workLifeUser = _workLifeLogicLayer.GetUpdateWorkLifeUser(workLifeUser);
+            application.Job = _workLifeLogicLayer.GetJobById(application.JobId);
+            if (workLifeUser.ApplicantId != null && workLifeUser.Applicant != null)
+            {
+                application.ApplicantEmail = workLifeUser.Email;
+                application.Applicant = workLifeUser.Applicant;
+            }
+            if (ModelState.IsValid)
+            {
+                _workLifeLogicLayer.CreateNewApplcation(application);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(application);
+        }
+
+        [Authorize(Roles = "Employer")]
+        public IActionResult Applications(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            List<Application> applications = _workLifeLogicLayer.GetApplicationsByJobId(id);
+            return View(applications);
+        }
+
+        public IActionResult ApplicationDetail(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            Application application = _workLifeLogicLayer.GetApplicationByApplicationId(id);
+            return View(application);
+        }
+
+        [Authorize(Roles = "Applicant")]
+        public async Task<IActionResult> MyApplications()
+        {
+            WorkLifeUser workLifeUser = await _workLifeLogicLayer.GetWorkLifeUserByEmail(User.Identity.Name);
+            workLifeUser = _workLifeLogicLayer.GetUpdateWorkLifeUser(workLifeUser);
+            List<Application> applications = _workLifeLogicLayer.GetApplicationByApplicantId(workLifeUser.Applicant.Id);
+            return View(applications);
+        }
+
+        [Authorize(Roles = "Applicant")]
+        public IActionResult Withdraw(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            Application application = _workLifeLogicLayer.GetApplicationByApplicationId(id);
+            return View(application);
+        }
+
+        [HttpPost]
+        public IActionResult WithdrawConfirmed(int id)
+        {
+            _workLifeLogicLayer.DeleteApplicationById(id);
+            return RedirectToAction("MyApplications");
         }
     }
 }

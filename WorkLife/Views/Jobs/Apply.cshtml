@@ -1,0 +1,108 @@
+﻿@model WorkLife.Models.Application
+@{
+    ViewData["Title"] = "Apply for Job";
+}
+
+<h1>Apply</h1>
+
+<h4>Job</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Apply" method="post">           
+            <input type="hidden" asp-for="JobId" value="@ViewBag.JobId" />
+            <div class="form-group">
+                <label for="Resume">Resume:</label>
+                <textarea name="Resume" asp-for="Resume" class="form-control" ></textarea>
+                <span asp-validation-for="Resume" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceOneName">Reference One Name:</label>
+                <input type="text" name="ReferenceOneName" asp-for="ReferenceOneName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceOneEmail">Reference One Email:</label>
+                <input type="email" name="ReferenceOneEmail" asp-for="ReferenceOneEmail" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceOnePhoneNumber">Reference One Phone Number:</label>
+                <input type="tel" name="ReferenceOnePhoneNumber" asp-for="ReferenceOnePhoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceTwoName">Reference Two Name:</label>
+                <input type="text" name="ReferenceTwoName" asp-for="ReferenceTwoName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceTwoEmail">Reference Two Email:</label>
+                <input type="email" name="ReferenceTwoEmail" asp-for="ReferenceTwoEmail" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceTwoPhoneNumber">Reference Two Phone Number:</label>
+                <input type="tel" name="ReferenceTwoPhoneNumber" asp-for="ReferenceTwoPhoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceThreeName">Reference Three Name:</label>
+                <input type="text" name="ReferenceThreeName" asp-for="ReferenceThreeName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceThreeEmail">Reference Three Email:</label>
+                <input type="email" name="ReferenceThreeEmail" asp-for="ReferenceThreeEmail" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceThreePhoneNumber">Reference Three Phone Number:</label>
+                <input type="tel" name="ReferenceThreePhoneNumber" asp-for="ReferenceThreePhoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFourName">Reference Four Name:</label>
+                <input type="text" name="ReferenceFourName" asp-for="ReferenceFourName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFourEmail">Reference Four Email:</label>
+                <input type="email" name="ReferenceFourEmail" asp-for="ReferenceFourEmail" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFourPhoneNumber">Reference Four Phone Number:</label>
+                <input type="tel" name="ReferenceFourPhoneNumber" asp-for="ReferenceFourPhoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFiveName">Reference Five Name:</label>
+                <input type="text" name="ReferenceFiveName" asp-for="ReferenceFiveName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFiveEmail">Reference Five Email:</label>
+                <input type="email" name="ReferenceFiveEmail" asp-for="ReferenceFiveEmail" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="ReferenceFivePhoneNumber">Reference Five Phone Number:</label>
+                <input type="tel" name="ReferenceOneFiveNumber" asp-for="ReferenceFivePhoneNumber" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List of Jobs</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

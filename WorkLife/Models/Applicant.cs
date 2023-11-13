@@ -26,6 +26,8 @@ namespace WorkLife.Models
 
         [Display(Name = "Industry Areas")]
         public ICollection<ApplicantIndustryArea>? IndustryAreas { get; set; }
+
+        public ICollection<Application>? Applications { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]

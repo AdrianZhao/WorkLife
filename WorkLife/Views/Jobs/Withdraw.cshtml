@@ -1,0 +1,14 @@
+﻿@model WorkLife.Models.Application
+
+@{
+    ViewData["Title"] = "Withdraw Application";
+}
+
+<h1>Withdraw Application</h1>
+
+<p>Are you sure you want to withdraw your application for the position: @Model.Job.Title?</p>
+
+<form asp-action="WithdrawConfirmed" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Withdraw</button>
+    <a asp-action="MyApplications" class="btn btn-secondary">Cancel</a>
+</form>

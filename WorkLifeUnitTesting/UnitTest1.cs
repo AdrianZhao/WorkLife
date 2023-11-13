@@ -21,12 +21,13 @@ namespace WorkLifeUnitTesting
         private Mock<IRepository<ApplicantIndustryArea>> _applicantIndustryAreaRepo = new Mock<IRepository<ApplicantIndustryArea>>();
         private Mock<IRepository<EmployerIndustryArea>> _employerIndustryAreaRepo = new Mock<IRepository<EmployerIndustryArea>>();
         private Mock<IRepository<JobIndustryArea>> _jobIndustryAreaRepo = new Mock<IRepository<JobIndustryArea>>();
+        private Mock<IRepository<Application>> _applicationRepo = new Mock<IRepository<Application>>();
         private UserManager<WorkLifeUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
         private SignInManager<WorkLifeUser> _signInManager;
         public WorkLifeLogicLayer InitializeBLL()
         {
-            return new WorkLifeLogicLayer(_applicantRepo.Object, _employerRepo.Object, _workLifeUserRepo.Object, _countryRepo.Object, _jobRepo.Object, _industryAreaRepo.Object, _applicantIndustryAreaRepo.Object, _employerIndustryAreaRepo.Object, _jobIndustryAreaRepo.Object, _roleManager, _userManager, _signInManager);
+            return new WorkLifeLogicLayer(_applicantRepo.Object, _employerRepo.Object, _workLifeUserRepo.Object, _countryRepo.Object, _jobRepo.Object, _industryAreaRepo.Object, _applicationRepo.Object, _applicantIndustryAreaRepo.Object, _employerIndustryAreaRepo.Object, _jobIndustryAreaRepo.Object, _roleManager, _userManager, _signInManager);
         }
 
         [TestMethod]

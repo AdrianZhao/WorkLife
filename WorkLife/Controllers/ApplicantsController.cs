@@ -17,9 +17,9 @@ namespace WorkLife.Controllers
     public class ApplicantsController : Controller
     {
         private readonly WorkLifeLogicLayer _workLifeLogicLayer;
-        public ApplicantsController(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
+        public ApplicantsController(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<Application> applicationRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
         {
-            _workLifeLogicLayer = new WorkLifeLogicLayer(applicantRepository, employerRepository, workLifeUserRepository, countryRepository, jobRepository, industryAreaRepository, applicantIndustryAreaRepository, employerIndustryAreaRepository, jobIndustryAreaRepository, roleManager, userManager, signInManager);
+            _workLifeLogicLayer = new WorkLifeLogicLayer(applicantRepository, employerRepository, workLifeUserRepository, countryRepository, jobRepository, industryAreaRepository, applicationRepository, applicantIndustryAreaRepository, employerIndustryAreaRepository, jobIndustryAreaRepository, roleManager, userManager, signInManager);
         }
 
         [Authorize(Roles = "Applicant")]
@@ -64,7 +64,7 @@ namespace WorkLife.Controllers
         }
 
         [Authorize(Roles = "Applicant")]
-        public async Task<IActionResult> EditApplicantProfile()
+        public async Task<IActionResult> Profile()
         {
             WorkLifeUser workLifeUser = await _workLifeLogicLayer.GetWorkLifeUserByEmail(User.Identity.Name);
             workLifeUser = _workLifeLogicLayer.GetUpdateWorkLifeUser(workLifeUser);
@@ -78,7 +78,7 @@ namespace WorkLife.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditApplicantProfile(string industryAreasInput, Applicant applicant)
+        public IActionResult Profile(string industryAreasInput, Applicant applicant)
         {
             ViewBag.Countries = new SelectList(_workLifeLogicLayer.GetCountries(), "Id", "Name");
             if (string.IsNullOrWhiteSpace(industryAreasInput))

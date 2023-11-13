@@ -10,7 +10,10 @@
 <h1>All Jobs</h1>
 
 <p>
-    <a asp-action="Create">Create New Job</a>
+    @if (User.IsInRole("Employer"))
+    {
+        <a asp-action="Create">Create New Job</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -38,6 +41,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IndustryAreas)
+            </th>           
+            <th>
+                Total applications
             </th>
             <th></th>
         </tr>
@@ -77,18 +83,48 @@
                     }
                 }
             </td>
-                <td>
-                    @if (User.Identity.IsAuthenticated)
+            <td>
+                @if (User.IsInRole("Employer"))
+                {
+                    @if (@item.Applications.Count() > 0)
                     {
-                        var isCreator = item.EmployerEmail == currentUserId;
-                        if (isCreator)
+                        <a asp-action="Applications" asp-route-id="@item.Id">@item.Applications.Count()</a>
+                    }
+                    else
+                    {
+                        <p>No submissions</p>
+                    }
+                }
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated)
+                {                   
+                    bool isCreator = item.EmployerEmail == currentUserId;
+                    if (isCreator)
+                    {
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    }
+                    else
+                    { 
+                        if (User.IsInRole("Applicant"))
                         {
+                            bool isBeforeSubmissionDeadline = DateTime.Now.Date <= item.SubmissionDeadline;
                             <div>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                @if (isBeforeSubmissionDeadline)
+                                {
+                                    <a asp-action="Apply" asp-route-id="@item.Id">Apply</a>
+                                }
+                                else
+                                {
+                                    <span>Submission Deadline Passed</span>
+                                }
                             </div>
                         }
                     }
+                }
             </td>
         </tr>
     }

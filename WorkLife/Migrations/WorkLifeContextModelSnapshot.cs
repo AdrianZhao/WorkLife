@@ -291,6 +291,82 @@ namespace WorkLife.Migrations
                     b.ToTable("ApplicantIndustryAreas");
                 });
 
+            modelBuilder.Entity("WorkLife.Models.Application", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicantEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ApplicantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceFiveEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceFiveName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceFivePhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceFourEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceFourName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceFourPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceOneEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceOneName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceOnePhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceThreeEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceThreeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceThreePhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceTwoEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceTwoName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceTwoPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Resume")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("Applications");
+                });
+
             modelBuilder.Entity("WorkLife.Models.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -525,6 +601,23 @@ namespace WorkLife.Migrations
                     b.Navigation("IndustryArea");
                 });
 
+            modelBuilder.Entity("WorkLife.Models.Application", b =>
+                {
+                    b.HasOne("WorkLife.Models.Applicant", "Applicant")
+                        .WithMany("Applications")
+                        .HasForeignKey("ApplicantId");
+
+                    b.HasOne("WorkLife.Models.Job", "Job")
+                        .WithMany("Applications")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Applicant");
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("WorkLife.Models.EmployerIndustryArea", b =>
                 {
                     b.HasOne("WorkLife.Models.Employer", "Employer")
@@ -565,6 +658,8 @@ namespace WorkLife.Migrations
 
             modelBuilder.Entity("WorkLife.Models.Applicant", b =>
                 {
+                    b.Navigation("Applications");
+
                     b.Navigation("IndustryAreas");
                 });
 
@@ -584,6 +679,8 @@ namespace WorkLife.Migrations
 
             modelBuilder.Entity("WorkLife.Models.Job", b =>
                 {
+                    b.Navigation("Applications");
+
                     b.Navigation("IndustryAreas");
                 });
 #pragma warning restore 612, 618

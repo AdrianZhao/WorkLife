@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
+using System.Collections.Generic;
 using WorkLife.Areas.Identity.Data;
 using WorkLife.Data;
 
@@ -14,13 +15,14 @@ namespace WorkLife.Models.WorkLifeLogicLayer
         private readonly IRepository<Country> _countryRepository;
         private readonly IRepository<Job> _jobRepository;
         private readonly IRepository<IndustryArea> _industryAreaRepository;
+        private readonly IRepository<Application> _applicationRepository;
         private readonly IRepository<ApplicantIndustryArea> _applicantIndustryAreaRepository;
         private readonly IRepository<EmployerIndustryArea> _employerIndustryAreaRepository;
         private readonly IRepository<JobIndustryArea> _jobIndustryAreaRepository;
         private readonly UserManager<WorkLifeUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<WorkLifeUser> _signInManager;
-        public WorkLifeLogicLayer(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
+        public WorkLifeLogicLayer(IRepository<Applicant> applicantRepository, IRepository<Employer> employerRepository, IRepository<WorkLifeUser> workLifeUserRepository, IRepository<Country> countryRepository, IRepository<Job> jobRepository, IRepository<IndustryArea> industryAreaRepository, IRepository<Application> applicationRepository, IRepository<ApplicantIndustryArea> applicantIndustryAreaRepository, IRepository<EmployerIndustryArea> employerIndustryAreaRepository, IRepository<JobIndustryArea> jobIndustryAreaRepository, RoleManager<IdentityRole> roleManager, UserManager<WorkLifeUser> userManager, SignInManager<WorkLifeUser> signInManager)
         {
             _applicantRepository = applicantRepository;
             _employerRepository = employerRepository;
@@ -28,6 +30,7 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             _countryRepository = countryRepository;
             _jobRepository = jobRepository;
             _industryAreaRepository = industryAreaRepository;
+            _applicationRepository = applicationRepository;     
             _applicantIndustryAreaRepository = applicantIndustryAreaRepository;
             _employerIndustryAreaRepository = employerIndustryAreaRepository;
             _jobIndustryAreaRepository = jobIndustryAreaRepository;
@@ -36,9 +39,9 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             _signInManager = signInManager;
         }
 
-        public ICollection<Country> GetCountries()
+        public List<Country> GetCountries()
         {
-            return _countryRepository.GetAll();
+            return _countryRepository.GetAll().ToList();
         }
 
         public List<IndustryArea> SeprateIndustryAreas(string industryAreas)
@@ -160,9 +163,9 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             }
         }
 
-        public ICollection<WorkLifeUser> GetUsers()
+        public List<WorkLifeUser> GetUsers()
         {
-            return _workLifeUserRepository.GetAll();
+            return _workLifeUserRepository.GetAll().ToList();
         }
 
         public WorkLifeUser GetWorkLifeUser()
@@ -250,13 +253,13 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             return workLifeUser;
         }
 
-        public ICollection<Job> GetJobs()
+        public List<Job> GetJobs()
         {
             List<Job> jobs = _jobRepository.GetAll().ToList();
             return jobs;
         }
 
-        public ICollection<Job> GetJobsByEmployerId(string employerEmail)
+        public List<Job> GetJobsByEmployerId(string employerEmail)
         {
             if (string.IsNullOrEmpty(employerEmail))
             {
@@ -335,7 +338,59 @@ namespace WorkLife.Models.WorkLifeLogicLayer
                 throw new ArgumentOutOfRangeException();
             }
             Job job = _jobRepository.GetAll().FirstOrDefault(i => i.Id == jobId);
+            if (job.Applications.Count() > 0)
+            {
+                List<Application> applications = _applicationRepository.GetAll().Where(a => a.JobId == job.Id).ToList();
+                foreach (Application application in applications)
+                {
+                    _applicationRepository.Delete(application);
+                }
+            }
             _jobRepository.Delete(job);
+        }
+
+        public void CreateNewApplcation(Application application)
+        {
+            _applicationRepository.Create(application);
+        }
+
+        public List<Application> GetApplicationsByJobId(int jobId) 
+        {
+            if (jobId == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            List<Application> applications = _applicationRepository.GetAll().Where(a => a.JobId == jobId).ToList();
+            return applications;
+        }
+
+        public Application GetApplicationByApplicationId(int applicationId)
+        {
+            if (applicationId == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            return _applicationRepository.GetAll().Where(a => a.Id == applicationId).FirstOrDefault();
+        }
+
+        public List<Application> GetApplicationByApplicantId(int applicantId)
+        {
+            if (applicantId == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            List<Application> applications = _applicationRepository.GetAll().Where(a => a.Applicant.Id == applicantId).ToList();
+            return applications;
+        }
+
+        public void DeleteApplicationById(int applicationId)
+        {
+            if (applicationId == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            Application application = _applicationRepository.GetAll().Where(a => a.Id == applicationId).FirstOrDefault();
+            _applicationRepository.Delete(application);
         }
     }
 }

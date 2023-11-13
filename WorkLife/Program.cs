@@ -22,6 +22,7 @@ builder.Services.AddScoped(typeof(IRepository<Employer>), typeof(EmployerReposit
 builder.Services.AddScoped(typeof(IRepository<Country>), typeof(CountryRepository));
 builder.Services.AddScoped(typeof(IRepository<Job>), typeof(JobRepository));
 builder.Services.AddScoped(typeof(IRepository<IndustryArea>), typeof(IndustryAreaRepository));
+builder.Services.AddScoped(typeof(IRepository<Application>), typeof(ApplicationRepository));
 builder.Services.AddScoped(typeof(IRepository<ApplicantIndustryArea>), typeof(ApplicantIndustryAreaRepository));
 builder.Services.AddScoped(typeof(IRepository<EmployerIndustryArea>), typeof(EmployerIndustryAreaRepository));
 builder.Services.AddScoped(typeof(IRepository<JobIndustryArea>), typeof(JobIndustryAreaRepository));

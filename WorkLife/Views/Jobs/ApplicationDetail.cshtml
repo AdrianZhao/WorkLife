@@ -1,0 +1,22 @@
+﻿@model WorkLife.Models.Application
+
+@{
+    ViewData["Title"] = "Application Details";
+}
+
+<h1>Application Details</h1>
+
+<div>
+    <h4>Applicant: @Model.ApplicantEmail</h4>
+    <p>Resume:</p>
+    <p>@Model.Resume</p>
+
+    <h4>References:</h4>
+    <ul>
+        <li>@Model.ReferenceOneName - Email: @Model.ReferenceOneEmail, Phone: @Model.ReferenceOnePhoneNumber</li>
+        <li>@Model.ReferenceTwoName - Email: @Model.ReferenceTwoEmail, Phone: @Model.ReferenceTwoPhoneNumber</li>
+        <li>@Model.ReferenceThreeName - Email: @Model.ReferenceThreeEmail, Phone: @Model.ReferenceThreePhoneNumber</li>
+        <li>@Model.ReferenceFourName - Email: @Model.ReferenceFourEmail, Phone: @Model.ReferenceFourPhoneNumber</li>
+        <li>@Model.ReferenceFiveName - Email: @Model.ReferenceFiveEmail, Phone: @Model.ReferenceFivePhoneNumber</li>
+    </ul>
+</div>

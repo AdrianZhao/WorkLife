@@ -28,7 +28,7 @@ namespace WorkLife.Data
         }
         public ICollection<Job> GetAll()
         {
-            ICollection<Job> jobs = _context.Jobs.Include(j => j.IndustryAreas).ThenInclude(ia => ia.IndustryArea).ToList();
+            ICollection<Job> jobs = _context.Jobs.Include(j => j.IndustryAreas).ThenInclude(ia => ia.IndustryArea).Include(j => j.Applications).ToList();
             return jobs;
         }
         public Job Update(Job entity)

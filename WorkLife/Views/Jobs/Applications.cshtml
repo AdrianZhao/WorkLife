@@ -1,0 +1,48 @@
+﻿@model IEnumerable<WorkLife.Models.Application>
+
+@{
+    ViewData["Title"] = "List of Applications";
+}
+
+<h1>List of Applications</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Applicant Name</th>
+                <th>First 20 Words of Resume</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.Applicant.FamilyName, @application.Applicant.PersonName</td>
+                    <td>@GetFirstTwentyWords(application.Resume)</td>
+                    <td>
+                        <a asp-action="ApplicationDetail" asp-route-id="@application.Id" class="btn btn-info">View Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No job applications found.</p>
+}
+
+@functions {
+    string GetFirstTwentyWords(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return string.Empty;
+        }
+        var words = input.Split(' ').Take(20);
+        return string.Join(" ", words);
+    }
+}

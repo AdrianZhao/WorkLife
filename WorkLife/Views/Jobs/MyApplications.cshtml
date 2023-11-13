@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WorkLife.Models.Application>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<h1>My Applications</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Position Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.Job.Title</td>
+                    <td>
+                        <a asp-action="ApplicationDetail" asp-route-id="@application.Id">View Details</a> |
+                        <a asp-action="Withdraw" asp-route-id="@application.Id">Withdraw</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You do not have any applications.</p>
+}

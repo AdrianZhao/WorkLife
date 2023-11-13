@@ -21,6 +21,7 @@ public class WorkLifeContext : IdentityDbContext<WorkLifeUser>
     public DbSet<ApplicantIndustryArea> ApplicantIndustryAreas { get; set; } = default!;
     public DbSet<EmployerIndustryArea> EmployerIndustryAreas { get; set; } = default!;
     public DbSet<JobIndustryArea> JobIndustryAreas { get; set; } = default!;
+    public DbSet<Application> Applications { get; set; } = default!;
     public async Task Seed(IServiceProvider serviceProvider)
     {
         await SeedData.Initialize(serviceProvider);
