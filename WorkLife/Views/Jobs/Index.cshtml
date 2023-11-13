@@ -9,12 +9,6 @@
 
 <h1>All Jobs</h1>
 
-<p>
-    @if (User.IsInRole("Employer"))
-    {
-        <a asp-action="Create">Create New Job</a>
-    }
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -49,35 +43,35 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) 
+    @foreach (var job in Model) 
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => job.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duration)
+                @Html.DisplayFor(modelItem => job.Duration)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Competition)
+                @Html.DisplayFor(modelItem => job.Competition)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Location)
+                @Html.DisplayFor(modelItem => job.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => job.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => job.StartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SubmissionDeadline)
+                @Html.DisplayFor(modelItem => job.SubmissionDeadline)
             </td>
             <td>
-                @foreach (var industryArea in item.IndustryAreas)
+                @foreach (var industryArea in job.IndustryAreas)
                 {
                     @industryArea.IndustryArea.Title
-                    @if (industryArea != item.IndustryAreas.Last())
+                    @if (industryArea != job.IndustryAreas.Last())
                     {
                         <text>, </text>
                     }
@@ -86,9 +80,9 @@
             <td>
                 @if (User.IsInRole("Employer"))
                 {
-                    @if (@item.Applications.Count() > 0)
+                    @if (job.Applications.Count() > 0)
                     {
-                        <a asp-action="Applications" asp-route-id="@item.Id">@item.Applications.Count()</a>
+                        <a asp-action="Applications" asp-route-id="@job.Id">@job.Applications.Count()</a>
                     }
                     else
                     {
@@ -99,23 +93,23 @@
             <td>
                 @if (User.Identity.IsAuthenticated)
                 {                   
-                    bool isCreator = item.EmployerEmail == currentUserId;
+                    bool isCreator = job.EmployerEmail == currentUserId;
                     if (isCreator)
                     {
                         <div>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@job.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@job.Id">Delete</a>
                         </div>
                     }
                     else
                     { 
                         if (User.IsInRole("Applicant"))
                         {
-                            bool isBeforeSubmissionDeadline = DateTime.Now.Date <= item.SubmissionDeadline;
+                            bool isBeforeSubmissionDeadline = DateTime.Now.Date <= job.SubmissionDeadline;
                             <div>
                                 @if (isBeforeSubmissionDeadline)
                                 {
-                                    <a asp-action="Apply" asp-route-id="@item.Id">Apply</a>
+                                    <a asp-action="Apply" asp-route-id="@job.Id">Apply</a>
                                 }
                                 else
                                 {

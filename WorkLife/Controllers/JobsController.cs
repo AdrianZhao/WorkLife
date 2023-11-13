@@ -73,12 +73,18 @@ namespace WorkLife.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(string industryAreasInput, Job job)
+        public async Task<IActionResult> Edit(string industryAreasInput, Job job)
         {
             if (string.IsNullOrWhiteSpace(industryAreasInput))
             {
                 ModelState.AddModelError("industryAreasInput", "Industry Areas is required.");
                 return View(job);
+            }
+            WorkLifeUser workLifeUser = await _workLifeLogicLayer.GetWorkLifeUserByEmail(User.Identity.Name);
+            workLifeUser = _workLifeLogicLayer.GetUpdateWorkLifeUser(workLifeUser);
+            if (workLifeUser.EmployerId != null && workLifeUser.Employer != null)
+            {
+                job.EmployerEmail = workLifeUser.Email;
             }
             if (ModelState.IsValid)
             {
