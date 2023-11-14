@@ -13,10 +13,82 @@
 
     <h4>References:</h4>
     <ul>
-        <li>@Model.ReferenceOneName - Email: @Model.ReferenceOneEmail, Phone: @Model.ReferenceOnePhoneNumber</li>
-        <li>@Model.ReferenceTwoName - Email: @Model.ReferenceTwoEmail, Phone: @Model.ReferenceTwoPhoneNumber</li>
-        <li>@Model.ReferenceThreeName - Email: @Model.ReferenceThreeEmail, Phone: @Model.ReferenceThreePhoneNumber</li>
-        <li>@Model.ReferenceFourName - Email: @Model.ReferenceFourEmail, Phone: @Model.ReferenceFourPhoneNumber</li>
-        <li>@Model.ReferenceFiveName - Email: @Model.ReferenceFiveEmail, Phone: @Model.ReferenceFivePhoneNumber</li>
+        @if (!string.IsNullOrEmpty(Model.ReferenceOneName) || !string.IsNullOrEmpty(Model.ReferenceTwoName) || !string.IsNullOrEmpty(Model.ReferenceThreeName) || !string.IsNullOrEmpty(Model.ReferenceFourName) || !string.IsNullOrEmpty(Model.ReferenceFiveName))
+        {
+            @if (!string.IsNullOrEmpty(Model.ReferenceOneName))
+            {
+                <li>
+                    @Model.ReferenceOneName
+                    @if (!string.IsNullOrEmpty(Model.ReferenceOneEmail))
+                    {
+                        <span> - Email: @Model.ReferenceOneEmail</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ReferenceOnePhoneNumber))
+                    {
+                        <span>, Phone: @Model.ReferenceOnePhoneNumber</span>
+                    }
+                </li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ReferenceTwoName))
+            {
+                <li>
+                    @Model.ReferenceTwoName
+                    @if (!string.IsNullOrEmpty(Model.ReferenceTwoEmail))
+                    {
+                        <span> - Email: @Model.ReferenceTwoEmail</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ReferenceTwoPhoneNumber))
+                    {
+                        <span>, Phone: @Model.ReferenceTwoPhoneNumber</span>
+                    }
+                </li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ReferenceThreeName))
+            {
+                <li>
+                    @Model.ReferenceThreeName
+                    @if (!string.IsNullOrEmpty(Model.ReferenceThreeEmail))
+                    {
+                        <span> - Email: @Model.ReferenceThreeEmail</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ReferenceThreePhoneNumber))
+                    {
+                        <span>, Phone: @Model.ReferenceThreePhoneNumber</span>
+                    }
+                </li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ReferenceFourName))
+            {
+                <li>
+                    @Model.ReferenceFourName
+                    @if (!string.IsNullOrEmpty(Model.ReferenceFourEmail))
+                    {
+                        <span> - Email: @Model.ReferenceFourEmail</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ReferenceFourPhoneNumber))
+                    {
+                        <span>, Phone: @Model.ReferenceFourPhoneNumber</span>
+                    }
+                </li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ReferenceFiveName))
+            {
+                <li>
+                    @Model.ReferenceFiveName
+                    @if (!string.IsNullOrEmpty(Model.ReferenceFiveEmail))
+                    {
+                        <span> - Email: @Model.ReferenceFiveEmail</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ReferenceFivePhoneNumber))
+                    {
+                        <span>, Phone: @Model.ReferenceFivePhoneNumber</span>
+                    }
+                </li>
+            }
+        } 
+        else
+        {
+           <li>No reference information</li>
+        }
     </ul>
 </div>

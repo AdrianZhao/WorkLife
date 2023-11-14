@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using WorkLife.Areas.Identity.Data;
 using WorkLife.Data;
 using WorkLife.Models;
+using WorkLife.Models.ViewModel;
 using WorkLife.Models.WorkLifeLogicLayer;
 
 namespace WorkLife.Controllers
@@ -22,9 +23,11 @@ namespace WorkLife.Controllers
             _workLifeLogicLayer = new WorkLifeLogicLayer(applicantRepository, employerRepository, workLifeUserRepository, countryRepository, jobRepository, industryAreaRepository, applicationRepository, applicantIndustryAreaRepository, employerIndustryAreaRepository, jobIndustryAreaRepository, roleManager, userManager, signInManager);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Job> jobs = _workLifeLogicLayer.GetJobs().ToList();
+            WorkLifeUser workLifeUser = await _workLifeLogicLayer.GetWorkLifeUserByEmail(User.Identity.Name);
+            workLifeUser = _workLifeLogicLayer.GetUpdateWorkLifeUser(workLifeUser);
+            List<ApplicantJobsViewModel> jobs = _workLifeLogicLayer.GetJobs(workLifeUser.ApplicantId).ToList();
             return View(jobs);
         }
 
@@ -144,6 +147,7 @@ namespace WorkLife.Controllers
                 _workLifeLogicLayer.CreateNewApplcation(application);
                 return RedirectToAction("Index", "Home");
             }
+            ViewBag.JobId = application.JobId;
             return View(application);
         }
 
@@ -193,6 +197,31 @@ namespace WorkLife.Controllers
         {
             _workLifeLogicLayer.DeleteApplicationById(id);
             return RedirectToAction("MyApplications");
+        }
+
+        [Authorize(Roles = "Applicant")]
+        public IActionResult EditApplication(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            Application application = _workLifeLogicLayer.GetApplicationByApplicationId(id);
+            ViewBag.JobId = application.JobId;
+            return View(application);
+        }
+
+        [HttpPost]
+        public IActionResult EditApplication(Application application)
+        {            
+            if (ModelState.IsValid)
+            {
+                Application result = _workLifeLogicLayer.GetApplicationByApplicationId(application.Id);
+                _workLifeLogicLayer.UpdateCurrentApplication(result ,application);
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.JobId = application.JobId;
+            return View(application);
         }
     }
 }

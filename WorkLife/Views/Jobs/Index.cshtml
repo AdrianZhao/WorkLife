@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WorkLife.Models.Job>
+﻿@model IEnumerable<WorkLife.Models.ViewModel.ApplicantJobsViewModel>
 @using Microsoft.AspNetCore.Identity
 
 @{
@@ -13,65 +13,65 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Job.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Duration)
+                @Html.DisplayNameFor(model => model.Job.Duration)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Competition)
+                @Html.DisplayNameFor(model => model.Job.Competition)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                @Html.DisplayNameFor(model => model.Job.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Job.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.Job.StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SubmissionDeadline)
+                @Html.DisplayNameFor(model => model.Job.SubmissionDeadline)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IndustryAreas)
+                @Html.DisplayNameFor(model => model.Job.IndustryAreas)
             </th>           
             <th>
-                Total applications
+                Status
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var job in Model) 
+    @foreach (var jobViewModel in Model) 
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => job.Title)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.Duration)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.Duration)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.Competition)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.Competition)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.Location)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.Description)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.StartDate)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.StartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => job.SubmissionDeadline)
+                @Html.DisplayFor(modelItem => jobViewModel.Job.SubmissionDeadline)
             </td>
             <td>
-                @foreach (var industryArea in job.IndustryAreas)
+                @foreach (var industryArea in jobViewModel.Job.IndustryAreas)
                 {
                     @industryArea.IndustryArea.Title
-                    @if (industryArea != job.IndustryAreas.Last())
+                    @if (industryArea != jobViewModel.Job.IndustryAreas.Last())
                     {
                         <text>, </text>
                     }
@@ -80,9 +80,9 @@
             <td>
                 @if (User.IsInRole("Employer"))
                 {
-                    @if (job.Applications.Count() > 0)
+                    @if (jobViewModel.Job.Applications.Count() > 0)
                     {
-                        <a asp-action="Applications" asp-route-id="@job.Id">@job.Applications.Count()</a>
+                        <a asp-action="Applications" asp-route-id="@jobViewModel.Job.Id">@jobViewModel.Job.Applications.Count()</a>
                     }
                     else
                     {
@@ -92,24 +92,31 @@
             </td>
             <td>
                 @if (User.Identity.IsAuthenticated)
-                {                   
-                    bool isCreator = job.EmployerEmail == currentUserId;
+                {
+                    bool isCreator = jobViewModel.Job.EmployerEmail == currentUserId;
                     if (isCreator)
                     {
                         <div>
-                            <a asp-action="Edit" asp-route-id="@job.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@job.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@jobViewModel.Job.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@jobViewModel.Job.Id">Delete</a>
                         </div>
                     }
                     else
                     { 
                         if (User.IsInRole("Applicant"))
                         {
-                            bool isBeforeSubmissionDeadline = DateTime.Now.Date <= job.SubmissionDeadline;
+                            bool isBeforeSubmissionDeadline = DateTime.Now.Date <= jobViewModel.Job.SubmissionDeadline;
                             <div>
                                 @if (isBeforeSubmissionDeadline)
                                 {
-                                    <a asp-action="Apply" asp-route-id="@job.Id">Apply</a>
+                                    if (!jobViewModel.IsApplied)
+                                    {
+                                        <a asp-action="Apply" asp-route-id="@jobViewModel.Job.Id">Apply</a>
+                                    }
+                                    else
+                                    {
+                                        <span>Applied</span>     
+                                    }
                                 }
                                 else
                                 {

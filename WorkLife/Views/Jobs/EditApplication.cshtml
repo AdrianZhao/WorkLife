@@ -1,19 +1,19 @@
 ﻿@model WorkLife.Models.Application
 @{
-    ViewData["Title"] = "Apply for Job";
+    ViewData["Title"] = "Edit for Job";
 }
 
-<h1>Apply</h1>
+<h1>Edit</h1>
 
-<h4>Job</h4>
+<h4>Application</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Apply" method="post">           
+        <form asp-action="EditApplication" method="post">
             <input type="hidden" asp-for="JobId" value="@ViewBag.JobId" />
             <div class="form-group">
                 <label for="Resume">Resume:</label>
-                <textarea name="Resume" asp-for="Resume" class="form-control" ></textarea>
+                <textarea name="Resume" asp-for="Resume" class="form-control"></textarea>
                 <span asp-validation-for="Resume" class="text-danger"></span>
             </div>
             <h5>References are optional</h5>
@@ -107,7 +107,7 @@
                 <span asp-validation-for="ReferenceFivePhoneNumber" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit Application</button>
+            <button type="submit" class="btn btn-primary">Apply changes</button>
         </form>
     </div>
 </div>

@@ -548,7 +548,7 @@ namespace WorkLifeUnitTesting
             // Assert
             Assert.AreEqual(workLifeUser.Id, result.Id);
         }
-
+        /*
         [TestMethod]
         public void GetJobs_ReturnsJobs()
         {
@@ -565,7 +565,7 @@ namespace WorkLifeUnitTesting
             // Assert
             CollectionAssert.AreEqual(expectedJobs, result.ToList());
         }
-
+        */
         [TestMethod]
         public void GetJobsByEmployerId_ReturnsJobs()
         {

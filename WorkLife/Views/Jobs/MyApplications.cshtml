@@ -21,7 +21,8 @@
                 <tr>
                     <td>@application.Job.Title</td>
                     <td>
-                        <a asp-action="ApplicationDetail" asp-route-id="@application.Id">View Details</a> |
+                        <a asp-action="ApplicationDetail" asp-route-id="@application.Id">View Details</a> | 
+                        <a asp-action="EditApplication" asp-route-id="@application.Id">Edit</a> | 
                         <a asp-action="Withdraw" asp-route-id="@application.Id">Withdraw</a>
                     </td>
                 </tr>

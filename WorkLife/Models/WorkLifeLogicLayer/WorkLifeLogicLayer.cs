@@ -4,6 +4,7 @@ using NuGet.Packaging;
 using System.Collections.Generic;
 using WorkLife.Areas.Identity.Data;
 using WorkLife.Data;
+using WorkLife.Models.ViewModel;
 
 namespace WorkLife.Models.WorkLifeLogicLayer
 {
@@ -253,10 +254,35 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             return workLifeUser;
         }
 
-        public List<Job> GetJobs()
+        public List<ApplicantJobsViewModel> GetJobs(int? applicantId)
         {
             List<Job> jobs = _jobRepository.GetAll().ToList();
-            return jobs;
+            List<ApplicantJobsViewModel> viewModelList = new List<ApplicantJobsViewModel>();
+            if (applicantId != null)
+            {
+                foreach (Job job in jobs)
+                {
+                    ApplicantJobsViewModel applicantJobsViewModel = new ApplicantJobsViewModel { Job = job };
+                    foreach (Application application in job.Applications)
+                    {
+                        if (application.Applicant.Id == applicantId)
+                        {
+                            applicantJobsViewModel.IsApplied = true;
+                            break;
+                        }
+                    }
+                    viewModelList.Add(applicantJobsViewModel);
+                }
+            }
+            else
+            {
+                foreach (Job job in jobs)
+                {
+                    ApplicantJobsViewModel applicantJobsViewModel = new ApplicantJobsViewModel { Job = job };
+                    viewModelList.Add(applicantJobsViewModel);
+                }
+            }
+            return viewModelList;
         }
 
         public List<Job> GetJobsByEmployerId(string employerEmail)
@@ -391,6 +417,27 @@ namespace WorkLife.Models.WorkLifeLogicLayer
             }
             Application application = _applicationRepository.GetAll().Where(a => a.Id == applicationId).FirstOrDefault();
             _applicationRepository.Delete(application);
+        }
+
+        public void UpdateCurrentApplication(Application result, Application application)
+        {
+            result.Resume = application.Resume;
+            result.ReferenceOneName = application.ReferenceOneName;
+            result.ReferenceOneEmail = application.ReferenceOneEmail;
+            result.ReferenceOnePhoneNumber = application.ReferenceOnePhoneNumber;
+            result.ReferenceTwoName = application.ReferenceTwoName;
+            result.ReferenceTwoEmail = application.ReferenceTwoEmail;
+            result.ReferenceTwoPhoneNumber = application.ReferenceTwoPhoneNumber;
+            result.ReferenceThreeName = application.ReferenceThreeName;
+            result.ReferenceThreeEmail = application.ReferenceThreeEmail;
+            result.ReferenceThreePhoneNumber = application.ReferenceThreePhoneNumber;
+            result.ReferenceFourName = application.ReferenceFourName;
+            result.ReferenceFourEmail = application.ReferenceFourEmail;
+            result.ReferenceFourPhoneNumber = application.ReferenceFourPhoneNumber;
+            result.ReferenceFiveName = application.ReferenceFiveName;
+            result.ReferenceFiveEmail = application.ReferenceFiveEmail;
+            result.ReferenceFivePhoneNumber = application.ReferenceFivePhoneNumber;
+            _applicationRepository.Update(result);
         }
     }
 }
